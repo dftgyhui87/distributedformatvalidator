@@ -1,20 +1,26 @@
-function multiply(num1, num2) {
-  const m = num1.length;
-  const n = num2.length;
-  const pos = new Array(m + n).fill(0);
-  for (let i = m - 1; i >= 0; i--) {
-    for (let j = n - 1; j >= 0; j--) {
-      const mul = (num1[i] - "0") * (num2[j] - "0");
-      const p1 = i + j;
-      const p2 = i + j + 1;
-      const sum = mul + pos[p2];
-      pos[p1] += Math.floor(sum / 10);
-      pos[p2] = sum % 10;
+const mergeSortIterative = (arr) => {
+  const merge = (left, right) => {
+    let result = [];
+    let leftIndex = 0;
+    let rightIndex = 0;
+    while (leftIndex < left.length && rightIndex < right.length) {
+      if (left[leftIndex] < right[rightIndex]) {
+        result.push(left[leftIndex]);
+        leftIndex++;
+      } else {
+        result.push(right[rightIndex]);
+        rightIndex++;
+      }
+    }
+    return result.concat(left.slice(leftIndex)).concat(right.slice(rightIndex));
+  };
+  const mergeSize = 2;
+  for (let i = 0; i < arr.length; i += mergeSize) {
+    for (let j = i; j < arr.length; j += mergeSize) {
+      const left = arr.slice(j, j + mergeSize / 2);
+      const right = arr.slice(j + mergeSize / 2, j + mergeSize);
+      arr.splice(j, mergeSize, ...merge(left, right));
     }
   }
-  let result = "";
-  for (const p of pos) {
-    if (!(result.length === 0 && p === 0)) result += p;
-  }
-  return result.length === 0 ? "0" : result;
-}
+  return arr;
+};
