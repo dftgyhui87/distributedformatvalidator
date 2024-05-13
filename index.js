@@ -1,26 +1,28 @@
-const mergeSortIterative = (arr) => {
-  const merge = (left, right) => {
-    let result = [];
-    let leftIndex = 0;
-    let rightIndex = 0;
-    while (leftIndex < left.length && rightIndex < right.length) {
-      if (left[leftIndex] < right[rightIndex]) {
-        result.push(left[leftIndex]);
-        leftIndex++;
-      } else {
-        result.push(right[rightIndex]);
-        rightIndex++;
-      }
-    }
-    return result.concat(left.slice(leftIndex)).concat(right.slice(rightIndex));
-  };
-  const mergeSize = 2;
-  for (let i = 0; i < arr.length; i += mergeSize) {
-    for (let j = i; j < arr.length; j += mergeSize) {
-      const left = arr.slice(j, j + mergeSize / 2);
-      const right = arr.slice(j + mergeSize / 2, j + mergeSize);
-      arr.splice(j, mergeSize, ...merge(left, right));
-    }
+function reorderList(head) {
+  if (!head || !head.next) return;
+  let slow = head;
+  let fast = head;
+  while (fast.next && fast.next.next) {
+    slow = slow.next;
+    fast = fast.next.next;
   }
-  return arr;
-};
+  let prev = null;
+  let curr = slow.next;
+  slow.next = null;
+  while (curr) {
+    const next = curr.next;
+    curr.next = prev;
+    prev = curr;
+    curr = next;
+  }
+  let first = head;
+  let second = prev;
+  while (second) {
+    const nextFirst = first.next;
+    const nextSecond = second.next;
+    first.next = second;
+    second.next = nextFirst;
+    first = nextFirst;
+    second = nextSecond;
+  }
+}
